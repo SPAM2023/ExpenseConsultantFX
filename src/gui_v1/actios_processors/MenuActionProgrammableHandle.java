@@ -36,6 +36,9 @@ public class MenuActionProgrammableHandle {
             ListIterator<Result> it;
             request.setFileWithPath(chosenFile.getAbsolutePath());
             it = PEC.instance().parseOFX(request);
+            while (it.hasNext()) {
+                System.out.println(it.next());
+            }
             // ???
         }
 
