@@ -274,7 +274,7 @@ public class OFXParser {
 			if (tag.equals("STMTTRN")) {
 				clearFields();
 			}
-			if (tag.startsWith("CREDITCARD")) {
+			if (tag.equals("CREDITCARDMSGSRSV1")) {
 				setCreditCard(true);
 				setAcctType("CREDIT CARD");
 			}
@@ -292,8 +292,7 @@ public class OFXParser {
 			// when I encounter "</a>", it tells me that all the tags
 			// inside "a" should be considered to be closed
 			if (tag.equals("STMTTRN") && date.compareTo(getEndDate()) <= 0) {
-				output.add(new Transaction(date, ref, name, mem, amt,
-						Transaction.getACategoryValue("OTHER")));
+				output.add(new Transaction(date, ref, name, mem, amt, Transaction.getACategoryValue("OTHER")));
 			}
 			while (!lastOpenTag().equals(tag)) {
 				closeTag(lastOpenTag());
@@ -374,10 +373,10 @@ public class OFXParser {
 		}
 	}
 
-	/*
+
 	public static void main(String[] args) throws IOException {
 		TransactionList t;
-		File file = new File("/Users/starnet/Downloads/CreditCardSAMPLE.qfx");
+		File file = new File("reditCardSAMPLE.qfx");
 		instance();
 		t = OFXParser.ofxParser(file);
 		ListIterator<Transaction> i = t.listIterator(); // t.sort(Transaction.DESCRIPTION);
@@ -391,5 +390,6 @@ public class OFXParser {
 		System.out.println("Account number: " + OFXParser.getAcctNumber());
 		System.out.println("Account type: " + OFXParser.getAcctType());
 	}
-	*/
+
+
 }

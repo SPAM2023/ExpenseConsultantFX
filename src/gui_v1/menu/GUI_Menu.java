@@ -1,14 +1,12 @@
 package gui_v1.menu;
 
 
-import java.awt.Component;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
-import gui_v1.actios_processors.GUI_Menu_Actions;
+import gui_v1.action_processors.GUI_Menu_Actions;
 import gui_v1.automation.GUI_ElementCreator;
 import gui_v1.settings.GUI_Settings_Variables;
 public class GUI_Menu extends JMenuBar implements GUI_Settings_Variables{

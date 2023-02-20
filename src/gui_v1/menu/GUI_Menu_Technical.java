@@ -1,11 +1,10 @@
 package gui_v1.menu;
 
-import gui_v1.actios_processors.GUI_Menu_Actions;
+import gui_v1.action_processors.GUI_Menu_Actions;
 import gui_v1.automation.GUI_ElementCreator;
 import gui_v1.settings.GUI_Settings_Variables;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class GUI_Menu_Technical  extends JMenuBar implements GUI_Settings_Variables {
     private static final long serialVersionUID = 1L;

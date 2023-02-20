@@ -4,9 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTable;
+import javax.swing.*;
 
 import gui_v1.automation.GUI_ElementCreator;
 import gui_v1.settings.GUI_Settings_Variables;
@@ -20,16 +18,19 @@ public class GUI_RecordsBoxP extends JPanel implements GUI_Settings_Variables{
 	private JLabel jlblRecordsMainTitle= GUI_ElementCreator.newHead(strHeadTitle_GUIRecordsWindow);
 	private JLabel jlblRecordsSubTitle =  GUI_ElementCreator.newSubHead(strDefaultSubTitleString);
 	
-	private String[] columnNames = {"T-Rec Num", "T-Explain", "T-Bank", "T-Acct #", "T-Amount"};
-	private String[][] testData = {{"Rec Num", "Explain", "Bank", "Acct #", "Amount"},
-			{"Rec Num", "Explain", "Bank", "Acct #", "Amount"},
-			{"Rec Num", "Explain", "Bank", "Acct #", "Amount"},
-			{"Rec Num", "Explain", "Bank", "Acct #", "Amount"},
-			{"Rec Num", "Explain", "Bank", "Acct #", "Amount"},
-			{"Rec Num", "Explain", "Bank", "Acct #", "Amount"},
-			{"Rec Num", "Explain", "Bank", "Acct #", "Amount"}};
-	private JTable jtRecordsTable = GUI_ElementCreator.newJTable(testData, columnNames);
-
+	private static String[] columnNames = {"Date", "Ref", "Name", "Memo", "Amount", "OTHER"};
+	private static String[][] testData = {{"Rec Num", "Explain", "Bank", "Acct #", "Amount", "OTHER"},
+			{"Rec Num", "Explain", "Bank", "Acct #", "Amount", "OTHER"},
+			{"Rec Num", "Explain", "Bank", "Acct #", "Amount", "OTHER"} ,
+			{"Rec Num", "Explain", "Bank", "Acct #", "Amount", "OTHER"},
+			{"Rec Num", "Explain", "Bank", "Acct #", "Amount", "OTHER"},
+			{"Rec Num", "Explain", "Bank", "Acct #", "Amount", "OTHER"},
+			{"Rec Num", "Explain", "Bank", "Acct #", "Amount", "OTHER"}};
+//	private static final JTable jtRecordsTable = GUI_ElementCreator.newJTable(testData, columnNames);
+////	private static JTable jtRecordsTable = GUI_ElementCreator.newJTable();
+//	public static JTable getTableView(){
+//		return jtRecordsTable;
+//	}
 	public GUI_RecordsBoxP() {
 		
 	
@@ -46,9 +47,18 @@ public class GUI_RecordsBoxP extends JPanel implements GUI_Settings_Variables{
 		jpRecordsTitleBoxP.add(jlblRecordsSubTitle);
 
 		jpRecordsDisplayBoxP.setLayout(new BorderLayout());
-		jpRecordsDisplayBoxP.add(jtRecordsTable.getTableHeader(), BorderLayout.PAGE_START);
-		jpRecordsDisplayBoxP.add(jtRecordsTable, BorderLayout.CENTER);
+//		jpRecordsDisplayBoxP.add(jtRecordsTable.getTableHeader(), BorderLayout.PAGE_START);
+//		jpRecordsDisplayBoxP.add(jtRecordsTable, BorderLayout.CENTER);
+//		jpRecordsDisplayBoxP.add(new RecordsTable(columnNames), BorderLayout.CENTER);
+//		jpRecordsDisplayBoxP.add(RecordsTable.createTableView(testData,columnNames));
+//		RecordsTable.createTableView(testData,columnNames);
+//		jpRecordsDisplayBoxP.add(RecordsTable.getRecordsTable().getTableHeader(), BorderLayout.PAGE_START);
+//
+//		jpRecordsDisplayBoxP.add(RecordsTable.getRecordsTable(), BorderLayout.CENTER);
+//		jpRecordsDisplayBoxP.add(new JScrollPane( new RecordsTable()), BorderLayout.CENTER);
 
+
+		jpRecordsDisplayBoxP.add(new RecordsTable());
 
 		jpRecordsActionControlsBoxP.setLayout(new GridLayout(1,3));
 //		jpRecordsActionControlsBoxP.setPreferredSize(new Dimension(0,300));

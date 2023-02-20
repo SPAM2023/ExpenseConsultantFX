@@ -10,6 +10,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import gui_v1.settings.GUI_Settings_Variables;
 public final class GUI_ElementCreator implements GUI_Settings_Variables{
@@ -131,5 +133,21 @@ public final class GUI_ElementCreator implements GUI_Settings_Variables{
 		jtbl.setRowHeight(jtbl.getFont().getSize()+2);
 		return jtbl;
 	}
+	public static void setTableHeads(JTable table, String[] columnNames){
+		TableColumn tc = table.getColumnModel().getColumn(0);
+		for (String name : columnNames) {
+			tc.setHeaderValue(name);
+		}
+	}
+	public static JTable newJTableWithModel(String[] columnNames) {
+		JTable jtbl = new JTable(new DefaultTableModel(columnNames, 0));
+		jtbl.getTableHeader().setBackground(clrB_JTableCellHead);
+		jtbl.getTableHeader().setForeground(clrF_JTableCellHead);
+		jtbl.getTableHeader().setFont(newFont(jtbl.getTableHeader().getFont(), txtSize_JTableHeader));
+		jtbl.setFont(newFont(jtbl.getFont(), txtSize_JTableCell));
+		jtbl.setRowHeight(jtbl.getFont().getSize()+2);
+		return jtbl;
+	}
+
 }
 

@@ -1,24 +1,32 @@
 package main_logic;
 
+//import java.util.ArrayList;
+//import java.util.ListIterator;
+
 import entities.Transaction;
 import entities.TransactionList;
 import parsers.OFXParser;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Iterator;
 import java.util.ListIterator;
 
+import static main_logic.Request.Button.DATE;
 import static main_logic.Result.Code.*;
+import static parsers.OFXParser.ofxParser;
 
 public class PEC {
+
+	private static double THREE_MONTHS_IN_SECS = 7889238.0;
 
 	// private main structure housing active Transaction data
 	// (no more than 3 months worth)
 	private TransactionList tList;
 	// array of booleans to remember if a particular column is sorted
-	// in a ascending (or descending) direction
-	private boolean[] ascColumn = { true, true, true, true, true, true };
+	// in a descending (or ascending) direction
+	private boolean[] descColumn = { true, true, true, true, true, true };
 	// sortedColumn indicates which column is active and sorted on screen
 	private int sortedColumn = Transaction.POSTED_DATE;
 
@@ -43,18 +51,7 @@ public class PEC {
 		return singleton;
 	}
 
-	/**
-	 * Gets the ascending/descending orientation of all view columns.
-	 * Important for GUI and the small arrow on the right side of the
-	 * active column header.
-	 * @return an array of boolean - each is TRUE if the corresponding
-	 * 			column is sorted in ascending order (FALSE for descending)
-	 */
-	public boolean[] getAscColumn() {
-		return ascColumn;
-	}
-
-	//	an example of "loading" any logic bearing method with Request parameter
+//	an example of "loading" any logic bearing method with Request parameter
 //	and returning a Result or a ListIterator to a list of Results.
 //	
 //	public Result XXX(Request request) {
@@ -75,11 +72,13 @@ public class PEC {
 // ...
 
 	/**
-	 * Sets all columns to be viewed in ascending order, sets the sorted
+	 * Sets all columns to be viewed in descending order, sets the sorted
 	 * column to go by as the one with the "date posted".
 	 */
 	private void resetView() {
-		Arrays.fill(ascColumn, true);
+		for (int i = 0; i < descColumn.length; i++) {
+			descColumn[i] = true;
+		}
 		sortedColumn = Transaction.POSTED_DATE;
 	}
 
@@ -91,10 +90,11 @@ public class PEC {
 	 * @param request - Request object
 	 * @return - list of Result objects with Transaction fields filled out
 	 */
-	private ListIterator<Result> parseOFX(Request request) {
+	public ListIterator<Result> parseOFX(Request request) {
 		File file = null;
 		boolean exception = false;
 		Result result = new Result();
+		ListIterator<Transaction> it = tList.listIterator();
 		ListIterator<Result> rList = new ArrayList<Result>().listIterator();
 		try {
 			file = new File(request.getFileWithPath());
@@ -108,57 +108,45 @@ public class PEC {
 			return rList;
 		}
 		result.setCode(SUCCESS);
-		ListIterator<Transaction> it = tList.listIterator();
+		resetView();
 		while (it.hasNext()) {
 			result.setTFields(it.next());
 			rList.add(result);
-			result = new Result();
 		}
-		resetView();
 		return rList;
 	}
 
 	/**
 	 * Fetches the Transaction list, sorts it by the active column criterion
-	 * and distinguishes whether the data are in ascending or descending order.
+	 * and distinguishes whether the data are in descending or ascending order.
 	 * @return the Result object list with all Transaction fields filled out
 	 */
 	private ListIterator<Result> getNewView() {
 		ListIterator<Transaction> it = tList.sort(sortedColumn);
 		ListIterator<Result> resIt = new ArrayList<Result>().listIterator();
-		Result result = new Result();
-		if (!it.hasNext()) {
-			result.setCode(NO_TRANSACTIONS);
-			resIt.add(result);
-			return resIt;
-		} else {
-			result.setCode(SUCCESS);
-		}
-		if (ascColumn[sortedColumn]) {
+		if (descColumn[sortedColumn]) {
 			while (it.hasNext()) {
+				Result result = new Result();
 				result.setTFields(it.next());
 				resIt.add(result);
-				result = new Result();
 			}
 		} else {
 			while (it.hasNext()) { it.next(); }
-			// maybe we need to add the last element as the first
-			// of the resIt ListIterator  ==>  test this!!
 			while (it.hasPrevious()) {
+				Result result = new Result();
 				result.setTFields(it.previous());
 				resIt.add(result);
-				result = new Result();
 			}
 		}
 		return resIt;
 	}
 
 	/**
-	 * Switches the view between ascending and descending order.
+	 * Switches the view between descending and ascending order.
 	 * @return new IteratorList to view
 	 */
 	private ListIterator<Result> sortingOrientationSwitched() {
-		ascColumn[sortedColumn] = !ascColumn[sortedColumn];
+		descColumn[sortedColumn] = !descColumn[sortedColumn];
 		return getNewView();
 	}
 
@@ -170,13 +158,25 @@ public class PEC {
 	 */
 	private ListIterator<Result> sortedColumnSwitched(Request request) {
 		switch (request.getButton()) {
-			case DATE -> sortedColumn = Transaction.POSTED_DATE;
-			case REF -> sortedColumn = Transaction.REF_NUMBER;
-			case NAME -> sortedColumn = Transaction.DESCRIPTION;
-			case MEMO -> sortedColumn = Transaction.MEMO;
-			case AMOUNT -> sortedColumn = Transaction.AMOUNT;
-			case CAT -> sortedColumn = Transaction.CATEGORY;
-			default -> { }
+			case DATE:
+				sortedColumn = Transaction.POSTED_DATE;
+				break;
+			case REF:
+				sortedColumn = Transaction.REF_NUMBER;
+				break;
+			case NAME:
+				sortedColumn = Transaction.DESCRIPTION;
+				break;
+			case MEMO:
+				sortedColumn = Transaction.MEMO;
+				break;
+			case AMOUNT:
+				sortedColumn = Transaction.AMOUNT;
+				break;
+			case CAT:
+				sortedColumn = Transaction.CATEGORY;
+				break;
+			default: ;
 		}
 		return getNewView();
 	}

@@ -1,12 +1,12 @@
 package main_logic;
 
-public class Result extends DataTransfer {
+public class Result extends main_logic.DataTransfer {
 
 	// result codes to be expanded to meet the needs of additional functionalities
 	// of the front/back end of the house.
 
 	public enum Code {
-		SUCCESS, IO_ERROR, LONG_LIST_ERROR, NO_TRANSACTIONS,
+		SUCCESS, IO_ERROR, LONG_LIST_ERROR,
 	} // ...
 
 	private Code resultCode;
